@@ -71,7 +71,7 @@ class BackdropSizer(QtWidgets.QGraphicsItem):
         if item and item.selected:
             color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         else:
-            color = QtGui.QColor(*item.color)
+            color = QtGui.QColor.fromRgbF(*item.color)
             color = color.darker(110)
         path = QtGui.QPainterPath()
         path.moveTo(rect.topRight())
@@ -159,22 +159,21 @@ class BackdropNodeItem(AbstractNodeItem):
         painter.save()
 
         rect = self.boundingRect()
-        color = (self.color[0], self.color[1], self.color[2], 50)
-        painter.setBrush(QtGui.QColor(*color))
+        color = (self.color[0], self.color[1], self.color[2], 0.196)
+        painter.setBrush(QtGui.QColor.fromRgbF(*color))
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRect(rect)
 
         top_rect = QtCore.QRectF(0.0, 0.0, rect.width(), 20.0)
-        painter.setBrush(QtGui.QColor(*self.color))
+        painter.setBrush(QtGui.QColor.fromRgbF(*self.color))
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRect(top_rect)
 
         if self.backdrop_text:
-            painter.setPen(QtGui.QColor(*self.text_color))
             txt_rect = QtCore.QRectF(
                 top_rect.x() + 5.0, top_rect.height() + 2.0,
                 rect.width() - 5.0, rect.height())
-            painter.setPen(QtGui.QColor(*self.text_color))
+            painter.setPen(QtGui.QColor.fromRgbF(*self.text_color))
             painter.drawText(txt_rect,
                              QtCore.Qt.AlignLeft | QtCore.Qt.TextWordWrap,
                              self.backdrop_text)
@@ -188,16 +187,16 @@ class BackdropNodeItem(AbstractNodeItem):
 
         txt_rect = QtCore.QRectF(top_rect.x(), top_rect.y() + 1.2,
                                  rect.width(), top_rect.height())
-        painter.setPen(QtGui.QColor(*self.text_color))
+        painter.setPen(QtGui.QColor.fromRgbF(*self.text_color))
         painter.drawText(txt_rect, QtCore.Qt.AlignCenter, self.name)
 
         path = QtGui.QPainterPath()
         path.addRect(rect)
-        border_color = self.color
+        border_color = QtGui.QColor.fromRgbF(*self.color)
         if self.selected and NODE_SEL_BORDER_COLOR:
-            border_color = NODE_SEL_BORDER_COLOR
+            border_color = QtGui.QColor(*NODE_SEL_BORDER_COLOR)
         painter.setBrush(QtCore.Qt.NoBrush)
-        painter.setPen(QtGui.QPen(QtGui.QColor(*border_color), 1))
+        painter.setPen(QtGui.QPen(border_color, 1))
         painter.drawPath(path)
 
         painter.restore()

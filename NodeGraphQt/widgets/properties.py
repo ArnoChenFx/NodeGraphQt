@@ -19,6 +19,8 @@ from ..constants import (NODE_PROP_QLABEL,
                          NODE_PROP_INT,
                          NODE_PROP_BUTTON)
 from .file_dialog import file_dialog
+from ..constants import ICON_CLOSE
+from .stylesheet import STYLE_QMENU
 
 
 class BaseProperty(QtWidgets.QWidget):
@@ -33,19 +35,19 @@ class BaseProperty(QtWidgets.QWidget):
 
 
 class PropColorPicker(BaseProperty):
-
     def __init__(self, parent=None):
         super(PropColorPicker, self).__init__(parent)
-        self._color = (0, 0, 0)
+        self._color = (1, 1, 1)
         self._button = QtWidgets.QPushButton()
         self._vector = PropVector3()
-        self._vector.set_value([0, 0, 0])
+        self._vector.set_value([1.0, 1.0, 1.0])
         self._update_color()
 
         self._button.clicked.connect(self._on_select_color)
         self._vector.value_changed.connect(self._on_vector_changed)
         layout = QtWidgets.QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(4)
         layout.addWidget(self._button, 0, QtCore.Qt.AlignLeft)
         layout.addWidget(self._vector, 1, QtCore.Qt.AlignLeft)
 
@@ -58,14 +60,12 @@ class PropColorPicker(BaseProperty):
         self._vector.set_value(list(self._color))
 
     def _on_select_color(self):
-        color = QtWidgets.QColorDialog.getColor(
-            QtGui.QColor.fromRgbF(*self.get_value())
-        )
+        color = QtWidgets.QColorDialog.getColor(QtGui.QColor.fromRgbF(*self.get_value()))
         if color.isValid():
-            self.set_value(color.getRgb())
+            self.set_value(color.getRgbF())
 
     def _update_color(self):
-        c = [int(max(min(i, 255), 0)) for i in self._color]
+        c = [int(max(min(i*255, 255), 0)) for i in self._color]
         hex_color = '#{0:02x}{1:02x}{2:02x}'.format(*c)
         self._button.setStyleSheet(
             '''QPushButton {{background-color: rgba({0}, {1}, {2}, 255);}}
@@ -356,6 +356,7 @@ class _ValueMenu(QtWidgets.QMenu):
         self.step = 1
         self.last_action = None
         self.steps = []
+        self.setStyleSheet(STYLE_QMENU)
 
     def set_steps(self, steps):
         self.clear()
@@ -826,8 +827,9 @@ class NodePropWidget(QtWidgets.QWidget):
         self.__tab_windows = {}
         self.__tab = QtWidgets.QTabWidget()
 
-        close_btn = QtWidgets.QPushButton('X')
+        close_btn = QtWidgets.QPushButton('')
         close_btn.setToolTip('close property')
+        close_btn.setIcon(QtGui.QIcon(ICON_CLOSE))
         close_btn.clicked.connect(self._on_close)
 
         self.name_wgt = PropLineEdit()

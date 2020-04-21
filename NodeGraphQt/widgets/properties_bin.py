@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from .. import QtWidgets, QtCore, QtGui, QtCompat
+from ..constants import ICON_CLEAR, ICON_LOCK, ICON_UNLOCK
 
 from .properties import NodePropWidget
 
@@ -82,14 +83,16 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         self._block_signal = False
 
         self._lock = False
-        self.btn_lock = QtWidgets.QPushButton('lock')
+        self.btn_lock = QtWidgets.QPushButton('')
+        self.btn_lock.setIcon(QtGui.QIcon(ICON_UNLOCK))
         self.btn_lock.setToolTip(
             'Lock the properties bin prevent nodes from being loaded.')
         self.btn_lock.clicked.connect(self.lock_bin)
 
-        btn_clr = QtWidgets.QPushButton('clear')
+        btn_clr = QtWidgets.QPushButton('')
         btn_clr.setToolTip('Clear the properties bin.')
         btn_clr.clicked.connect(self.clear_bin)
+        btn_clr.setIcon(QtGui.QIcon(ICON_CLEAR))
 
         top_layout = QtWidgets.QHBoxLayout()
         top_layout.setSpacing(2)
@@ -104,7 +107,7 @@ class PropertiesBinWidget(QtWidgets.QWidget):
 
         # wire up node graph.
         node_graph.add_properties_bin(self)
-        node_graph.node_double_clicked.connect(self.add_node)
+        node_graph.node_selected.connect(self.add_node)
         node_graph.nodes_deleted.connect(self.__on_nodes_deleted)
         node_graph.property_changed.connect(self.__on_graph_property_changed)
 
@@ -231,9 +234,9 @@ class PropertiesBinWidget(QtWidgets.QWidget):
         """
         self._lock = not self._lock
         if self._lock:
-            self.btn_lock.setText('UnLock')
+            self.btn_lock.setIcon(QtGui.QIcon(ICON_LOCK))
         else:
-            self.btn_lock.setText('Lock')
+            self.btn_lock.setIcon(QtGui.QIcon(ICON_UNLOCK))
 
     def clear_bin(self):
         """
@@ -290,7 +293,7 @@ if __name__ == '__main__':
                                  widget_type=NODE_PROP_SLIDER)
 
     def prop_changed(node_id, prop_name, prop_value):
-        print('-'*100)
+        print('-' * 100)
         print(node_id, prop_name, prop_value)
 
 

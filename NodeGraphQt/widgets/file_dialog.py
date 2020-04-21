@@ -42,7 +42,7 @@ class file_dialog(object):
         return file_dlg
 
 
-def messageBox(text, title , buttons):
+def messageBox(text, title, buttons):
     msg = QtWidgets.QMessageBox()
     msg.setStyleSheet(STYLE_MESSAGEBOX)
     msg.setWindowTitle(title)

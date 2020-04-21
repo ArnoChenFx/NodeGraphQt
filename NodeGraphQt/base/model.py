@@ -54,9 +54,9 @@ class NodeModel(object):
         self.id = hex(id(self))
         self.icon = None
         self.name = 'node'
-        self.color = (13, 18, 23, 255)
-        self.border_color = (74, 84, 85, 255)
-        self.text_color = (255, 255, 255, 180)
+        self.color = (0.051, 0.0706, 0.09)
+        self.border_color = (0.29, 0.329, 0.333)
+        self.text_color = (0.706, 0.706, 0.706)
         self.disabled = False
         self.selected = False
         self.visible = True

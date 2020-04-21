@@ -140,6 +140,21 @@ class NodeGraph(QtCore.QObject):
     :parameters: :str
     :emits: new session path
     """
+    show_node_info_panel_triggerd = QtCore.Signal(NodeObject)
+    """
+    Signal triggered when MMB clicked in viewer with node selected.
+
+    :parameters: :class:`NodeGraphQt.NodeObject`
+    :emits: selected node
+    """
+    close_node_info_panel_triggered = QtCore.Signal()
+    """
+    Signal triggered when MMB is released in viewer with node selected.
+    """
+    cook_graph = QtCore.Signal()
+    """
+    Signal triggered when all graph nodes need to be cooked.
+    """
 
     def __init__(self, parent=None):
         super(NodeGraph, self).__init__(parent)
@@ -172,6 +187,8 @@ class NodeGraph(QtCore.QObject):
         self._viewer.moved_nodes.connect(self._on_nodes_moved)
         self._viewer.node_double_clicked.connect(self._on_node_double_clicked)
         self._viewer.insert_node.connect(self._insert_node)
+        self._viewer.show_node_info_panel_triggered.connect(self._on_show_node_info_panel_triggered)
+        self._viewer.close_node_info_panel_triggered.connect(self._on_close_node_info_panel_triggered)
 
         # pass through signals.
         self._viewer.node_selected.connect(self._on_node_selected)
@@ -221,7 +238,6 @@ class NodeGraph(QtCore.QObject):
             return
         if self._viewer.underMouse():
             self._viewer.tab_search_set_nodes(self._node_factory.names)
-            self._viewer.tab_search_toggle()
 
     def _on_property_bin_changed(self, node_id, prop_name, prop_value):
         """
@@ -381,6 +397,19 @@ class NodeGraph(QtCore.QObject):
             port1.disconnect_from(port2)
         self._undo_stack.endMacro()
 
+    def _on_show_node_info_panel_triggered(self, node_id):
+        """
+        show info panel with current node information
+        """
+        node = self.get_node_by_id(node_id)
+        self.show_node_info_panel_triggerd.emit(node)
+
+    def _on_close_node_info_panel_triggered(self):
+        """
+        close info panel
+        """
+        self.close_node_info_panel_triggered.emit()
+
     @property
     def model(self):
         """
@@ -422,6 +451,7 @@ class NodeGraph(QtCore.QObject):
         if self._undo_view is None:
             self._undo_view = QtWidgets.QUndoView(self._undo_stack)
             self._undo_view.setWindowTitle("Undo View")
+            self._undo_view.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         return self._undo_view
 
     @property
@@ -817,6 +847,7 @@ class NodeGraph(QtCore.QObject):
             return
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
+            self.clear_selection()
             node = NodeCls()
             node.model._graph_model = self.model
 
@@ -1372,6 +1403,7 @@ class NodeGraph(QtCore.QObject):
         self.clear_undo_stack()
         self._model.session = file_path
         self.session_changed.emit(file_path)
+        self.cook_graph.emit()
 
     def copy_nodes(self, nodes=None):
         """

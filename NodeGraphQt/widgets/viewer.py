@@ -40,6 +40,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
     node_double_clicked = QtCore.Signal(str)
     data_dropped = QtCore.Signal(QtCore.QMimeData, QtCore.QPoint)
 
+    # node info panel signals
+    show_node_info_panel_triggered = QtCore.Signal(str)
+    close_node_info_panel_triggered = QtCore.Signal()
+
     def __init__(self, parent=None):
         super(NodeViewer, self).__init__(parent)
 
@@ -253,6 +257,10 @@ class NodeViewer(QtWidgets.QGraphicsView):
         nodes = [i for i in items if isinstance(i, AbstractNodeItem)]
 
         if nodes:
+            if self.MMB_state:
+                # node selected and mmb clicked, show the node info panel
+                self.show_node_info_panel_triggered.emit(nodes[0].id)
+
             self.MMB_state = False
 
         # toggle extend node selection.
@@ -290,6 +298,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
             self.RMB_state = False
         elif event.button() == QtCore.Qt.MiddleButton:
             self.MMB_state = False
+            # close the node info panel
+            self.close_node_info_panel_triggered.emit()
 
         # hide pipe slicer.
         if self._SLICER_PIPE.isVisible():
@@ -733,27 +743,8 @@ class NodeViewer(QtWidgets.QGraphicsView):
     def tab_search_set_nodes(self, nodes):
         self._search_widget.set_nodes(nodes)
 
-    def tab_search_toggle(self):
-        if isinstance(self._search_widget, TabSearchMenuWidget):
-            return
-
-        pos = self._previous_pos
-        state = not self._search_widget.isVisible()
-        if state:
-            rect = self._search_widget.rect()
-            new_pos = QtCore.QPoint(pos.x() - rect.width() / 2,
-                                    pos.y() - rect.height() / 2)
-            self._search_widget.move(new_pos)
-            self._search_widget.setVisible(state)
-            rect = self.mapToScene(rect).boundingRect()
-            self.scene().update(rect)
-        else:
-            self._search_widget.setVisible(state)
-            self.clearFocus()
-
     def rebuild_tab_search(self):
-        if isinstance(self._search_widget, TabSearchMenuWidget):
-            self._search_widget.rebuild = True
+        self._search_widget.rebuild = True
 
     def context_menus(self):
         return {'graph': self._ctx_menu,
