@@ -847,7 +847,6 @@ class NodeGraph(QtCore.QObject):
             return
         NodeCls = self._node_factory.create_node_instance(node_type)
         if NodeCls:
-            self.clear_selection()
             node = NodeCls()
             node.model._graph_model = self.model
 
@@ -861,6 +860,11 @@ class NodeGraph(QtCore.QObject):
                 for pname, pattrs in prop_attrs.items():
                     node_attrs[node.type_][pname].update(pattrs)
                 self.model.set_node_common_properties(node_attrs)
+
+            sel_nodes = []
+            if isinstance(node, SubGraph):
+                sel_nodes = self.selected_nodes()
+            self.clear_selection()
 
             node.NODE_NAME = self.get_unique_name(name or node.NODE_NAME)
             node.model.name = node.NODE_NAME
@@ -895,7 +899,7 @@ class NodeGraph(QtCore.QObject):
                 self.begin_undo('create sub graph node')
                 self._undo_stack.push(undo_cmd)
                 if node.get_property('create_from_select'):
-                    node.create_from_nodes(self.selected_nodes())
+                    node.create_from_nodes(sel_nodes)
                 self.end_undo()
             else:
                 self._undo_stack.push(undo_cmd)
