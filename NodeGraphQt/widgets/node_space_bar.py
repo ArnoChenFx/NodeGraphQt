@@ -16,6 +16,7 @@ class node_space_bar(QtWidgets.QWidget):
         self.set_node(self.graph.get_node_space())
 
     def add_slash(self):
+        return
         btn_slash = QtWidgets.QPushButton("/")
         btn_slash.setFixedWidth(7)
         btn_slash.setStyleSheet(STYLE_SLASH_BUTTON)

@@ -94,7 +94,7 @@ VIEWER_GRID_LINES = 2
 
 VIEWER_BG_COLOR = (35, 35, 35)
 VIEWER_GRID_COLOR = (45, 45, 45)
-VIEWER_GRID_SIZE = 50
+VIEWER_GRID_SIZE = 20
 
 DRAG_DROP_ID = 'n0deGraphQT'
 
@@ -104,6 +104,10 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 ICON_PATH = os.path.join(BASE_PATH, 'widgets', 'icons')
 ICON_DOWN_ARROW = os.path.join(ICON_PATH, 'down_arrow.png')
 ICON_NODE_BASE = os.path.join(ICON_PATH, 'node_base.png')
+ICON_CLEAR = os.path.join(ICON_PATH, 'clear.png')
+ICON_LOCK = os.path.join(ICON_PATH, 'lock.png')
+ICON_UNLOCK = os.path.join(ICON_PATH, 'unlock.png')
+ICON_CLOSE = os.path.join(ICON_PATH, 'close.png')
 
 # === DRAW STACK ORDER ===
 

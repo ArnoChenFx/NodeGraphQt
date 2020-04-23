@@ -133,7 +133,7 @@ class PortItem(QtWidgets.QGraphicsItem):
     def hoverEnterEvent(self, event):
         self.hovered = True
         super(PortItem, self).hoverEnterEvent(event)
-        
+
     def hoverLeaveEvent(self, event):
         self.hovered = False
         super(PortItem, self).hoverLeaveEvent(event)

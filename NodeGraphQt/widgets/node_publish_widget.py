@@ -21,7 +21,7 @@ class NodePublishWidget(QtWidgets.QDialog):
         self.node_class_name = QtWidgets.QLineEdit(node.name().replace(" ", "_"))
         self.node_identifier = QtWidgets.QLineEdit('Custom')
 
-        path = os.getcwd() + "/example_auto_nodes/published_nodes"
+        path = os.getcwd() + "/Node3D/nodes/published_nodes"
         if not os.path.exists(path):
             path = os.getcwd()
         path += "/" + self.node_class_name.text() + ".node"

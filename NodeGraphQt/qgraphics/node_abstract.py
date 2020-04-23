@@ -17,9 +17,9 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         self._properties = {
             'id': None,
             'name': name.strip(),
-            'color': (13, 18, 23, 255),
-            'border_color': (46, 57, 66, 255),
-            'text_color': (255, 255, 255, 180),
+            'color': (0.0509, 0.0705, 0.09, 1),
+            'border_color': (0.18, 0.224, 0.2589, 1),
+            'text_color': (1, 1, 1, 0.7059),
             'type_': 'AbstractBaseNode',
             'selected': False,
             'disabled': False,
@@ -106,7 +106,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         return self._properties['color']
 
     @color.setter
-    def color(self, color=(0, 0, 0, 255)):
+    def color(self, color=(0, 0, 0, 1)):
         self._properties['color'] = color
 
     @property
@@ -114,7 +114,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         return self._properties['text_color']
 
     @text_color.setter
-    def text_color(self, color=(100, 100, 100, 255)):
+    def text_color(self, color=(0.392, 0.392, 0.392, 1)):
         self._properties['text_color'] = color
 
     @property
@@ -122,7 +122,7 @@ class AbstractNodeItem(QtWidgets.QGraphicsItem):
         return self._properties['border_color']
 
     @border_color.setter
-    def border_color(self, color=(0, 0, 0, 255)):
+    def border_color(self, color=(0, 0, 0, 1)):
         self._properties['border_color'] = color
 
     @property

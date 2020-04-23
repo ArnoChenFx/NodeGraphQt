@@ -26,7 +26,7 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
         super(XDisabledItem, self).__init__(parent)
         self.setZValue(Z_VAL_NODE_WIDGET + 2)
         self.setVisible(False)
-        self.color = (0, 0, 0, 255)
+        self.color = (0, 0, 0)
         self.text = text
 
     def boundingRect(self):
@@ -50,13 +50,13 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                                  rect.top() - (margin / 2),
                                  rect.width() + margin,
                                  rect.height() + margin)
-        pen = QtGui.QPen(QtGui.QColor(*self.color), 8)
+        bg_color = QtGui.QColor.fromRgbF(*self.color)
+        pen = QtGui.QPen(bg_color, 8)
         pen.setCapStyle(QtCore.Qt.RoundCap)
         painter.setPen(pen)
         painter.drawLine(dis_rect.topLeft(), dis_rect.bottomRight())
         painter.drawLine(dis_rect.topRight(), dis_rect.bottomLeft())
 
-        bg_color = QtGui.QColor(*self.color)
         bg_color.setAlpha(100)
         bg_margin = -0.5
         bg_rect = QtCore.QRectF(dis_rect.left() - (bg_margin / 2),
@@ -97,7 +97,8 @@ class XDisabledItem(QtWidgets.QGraphicsItem):
                                          (rect.height() / 2) - (txt_h / 2),
                                          txt_w, txt_h)
             painter.setPen(QtGui.QPen(QtGui.QColor(255, 0, 0), 0.5))
-            painter.setBrush(QtGui.QColor(*self.color))
+            bg_color.setAlpha(255)
+            painter.setBrush(bg_color)
             painter.drawRoundedRect(text_bg_rect, 2, 2)
 
             text_rect = QtCore.QRectF((rect.width() / 2) - (font_width / 2),
@@ -155,14 +156,14 @@ class NodeItem(AbstractNodeItem):
                              self._width + bg_border,
                              self._height + bg_border)
         radius = 2
-        border_color = QtGui.QColor(*self.border_color)
+        border_color = QtGui.QColor.fromRgbF(*self.border_color)
 
         path = QtGui.QPainterPath()
         path.addRoundedRect(rect, radius, radius)
 
         rect = self.boundingRect()
 
-        bg_color = QtGui.QColor(*self.color)
+        bg_color = QtGui.QColor.fromRgbF(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
@@ -264,7 +265,7 @@ class NodeItem(AbstractNodeItem):
         Args:
             color (tuple): color value in (r, g, b, a).
         """
-        text_color = QtGui.QColor(*color)
+        text_color = QtGui.QColor.fromRgbF(*color)
         for port, text in self._input_items.items():
             text.setDefaultTextColor(text_color)
         for port, text in self._output_items.items():
@@ -301,7 +302,6 @@ class NodeItem(AbstractNodeItem):
     def calc_size(self, add_w=0.0, add_h=0.0):
         """
         calculate minimum node size.
-
 
         Args:
             add_w (float): additional width.
@@ -801,14 +801,14 @@ class NodeItemVertical(NodeItem):
                              self._width + bg_border,
                              self._height + bg_border)
         radius = 2
-        border_color = QtGui.QColor(*self.border_color)
+        border_color = QtGui.QColor.fromRgbF(*self.border_color)
 
         path = QtGui.QPainterPath()
         path.addRoundedRect(rect, radius, radius)
 
         rect = self.boundingRect()
 
-        bg_color = QtGui.QColor(*self.color)
+        bg_color = QtGui.QColor.fromRgbF(*self.color)
         painter.setBrush(bg_color)
         painter.setPen(QtCore.Qt.NoPen)
         painter.drawRoundedRect(rect, radius, radius)
