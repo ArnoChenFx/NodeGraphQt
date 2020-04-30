@@ -230,16 +230,24 @@ QPushButton {
     padding-left: 0px;
     padding-right: 0px;
     background-color:transparent;
+    min-width: 10;
+    max-width: 10;
+    min-height: 20;
+    max-height: 20;
 }
 '''
 STYLE_NODE_BUTTON = '''
 QPushButton {
     border-radius: 0px;
     border-width: 1px;
-    font-size:15px;
+    font-size: 15px;
     padding-left: 0px;
     padding-right: 0px;
     background-color: rgb(60,70,90);
+    min-width: 30;
+    min-height: 10;
+    max-width: 100;
+    max-height: 20;
     }
 QPushButton::pressed {
     border-style: inset;

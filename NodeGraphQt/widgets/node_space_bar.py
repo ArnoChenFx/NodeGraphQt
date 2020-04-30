@@ -1,5 +1,27 @@
 from .. import QtWidgets, QtCore
-from . stylesheet import STYLE_SLASH_BUTTON, STYLE_NODE_BUTTON
+from . stylesheet import STYLE_SLASH_BUTTON
+
+STYLE_NODE_BUTTON = '''
+QPushButton {{
+    border-radius: 0px;
+    border-width: 1px;
+    font-size: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: rgb(60,70,90);
+    min-width: {0};
+    min-height: 10;
+    max-width: {0};
+    max-height: 20;
+    }}
+QPushButton::pressed {{
+    border-style: inset;
+    border-color: rgb(100,100,100);
+    background-color: rgb(30,30,30);
+    }}
+QPushButton::hover {{
+    background-color: rgb(10,80,150);
+}}'''
 
 
 class node_space_bar(QtWidgets.QWidget):
@@ -18,17 +40,17 @@ class node_space_bar(QtWidgets.QWidget):
     def add_slash(self):
         return
         btn_slash = QtWidgets.QPushButton("/")
-        btn_slash.setFixedWidth(7)
+        # btn_slash.setFixedWidth(7)
         btn_slash.setStyleSheet(STYLE_SLASH_BUTTON)
-        btn_slash.setFixedHeight(20)
+        # btn_slash.setFixedHeight(20)
         self._layout.addWidget(btn_slash, QtCore.Qt.AlignLeft)
 
     def add_node(self, node):
         node_name = node.name()
         btn_node = QtWidgets.QPushButton(node_name)
-        btn_node.setFixedWidth(len(node_name)*8)
-        btn_node.setStyleSheet(STYLE_NODE_BUTTON)
-        btn_node.setFixedHeight(20)
+        btn_node.setStyleSheet(STYLE_NODE_BUTTON.format(len(node_name)*8))
+        # btn_node.setFixedWidth(len(node_name)*8)
+        # btn_node.setFixedHeight(20)
         btn_node.clicked.connect(lambda: self.graph.set_node_space(node))
         self._layout.addWidget(btn_node, QtCore.Qt.AlignLeft)
 

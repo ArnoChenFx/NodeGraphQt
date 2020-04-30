@@ -131,4 +131,4 @@ NODE_LAYOUT_VERTICAL = 0
 #: Mode for horizontal node layout.
 NODE_LAYOUT_HORIZONTAL = 1
 #: Variable for setting the node layout direction.
-NODE_LAYOUT_DIRECTION = NODE_LAYOUT_HORIZONTAL
+NODE_LAYOUT_DIRECTION = NODE_LAYOUT_VERTICAL
